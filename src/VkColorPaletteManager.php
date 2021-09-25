@@ -1,6 +1,6 @@
 <?php
 /**
- * VK Color Manager
+ * VkColorPaletteManager
  *
  * @package vk-color-palette-manager
  */
@@ -10,9 +10,9 @@ namespace VK_Color_Palette_Manager;
 use WP_Customize_Color_Control;
 
 /**
- * VK_Color_Palette_Manager
+ * VkColorPaletteManager
  */
-class VK_Color_Palette_Manager {
+class VkColorPaletteManager {
 
 	/**
 	 * Constructor
