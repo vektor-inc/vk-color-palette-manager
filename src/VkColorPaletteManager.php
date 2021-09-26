@@ -2,7 +2,8 @@
 /**
  * VK_Color_Palette_Manager
  *
- * @package vk-color-palette-manager
+ * @package vektor-inc/vk-color-palette-manager
+ * @license GPL-2.0+
  */
 
 namespace VektorInc\VK_Color_Palette_Manager;
