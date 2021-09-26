@@ -4,7 +4,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "VkColorPaletteManager\\": "src/"
+            "VektorInc\\VK_Color_Palette_Manager\\": "src/"
         }
     },
     "authors": [

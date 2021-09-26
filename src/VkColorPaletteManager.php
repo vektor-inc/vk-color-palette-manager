@@ -5,14 +5,14 @@
  * @package vk-color-palette-manager
  */
 
-namespace VkColorPaletteManager;
+namespace VektorInc\VK_Color_Palette_Manager;
 
 use WP_Customize_Color_Control;
 
 /**
  * VK_Color_Palette_Manager
  */
-class VK_Color_Palette_Manager {
+class VkColorPaletteManager {
 
 	/**
 	 * Constructor
