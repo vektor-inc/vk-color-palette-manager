@@ -118,6 +118,10 @@ class VkColorPaletteManager {
 			$editor_settings['__experimentalFeatures']['color']['palette']['core'],
 			$add_color
 		);
+		$editor_settings['colors'] = array_merge(
+			$editor_settings['colors'],
+			$add_color
+		);
 		return $editor_settings;
 	}
 
