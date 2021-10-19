@@ -4,11 +4,14 @@
  *
  * @package vektor-inc/vk-color-palette-manager
  * @license GPL-2.0+
+ *
+ * @version 0.0.10
  */
 
 namespace VektorInc\VK_Color_Palette_Manager;
 
 use WP_Customize_Color_Control;
+use VK_Custom_Html_Control;
 
 /**
  * VK_Color_Palette_Manager
@@ -32,6 +35,29 @@ class VkColorPaletteManager {
 	 * @param object $wp_customize : customize object.
 	 */
 	public static function customize_register( $wp_customize ) {
+
+		if ( class_exists( 'VK_Custom_Html_Control' ) ) {
+			$wp_customize->add_setting(
+				'color_palette_title',
+				array(
+					'sanitize_callback' => 'sanitize_text_field',
+				)
+			);
+			$wp_customize->add_control(
+				new VK_Custom_Html_Control(
+					$wp_customize,
+					'color_palette_title',
+					array(
+						'label'            => '',
+						'section'          => 'colors',
+						'type'             => 'text',
+						'custom_title_sub' => __( 'Color Palette Setting', 'vcpm_textdomain' ),
+						'custom_html'      => __( 'This color is reflected in the block editor\'s color palette.', 'vcpm_textdomain' ),
+						'priority'         => 1000,
+					)
+				)
+			);
+		}
 
 		for ( $i = 1; $i <= 5; $i++ ) {
 			$wp_customize->add_setting(
