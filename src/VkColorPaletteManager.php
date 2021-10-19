@@ -113,8 +113,8 @@ class VkColorPaletteManager {
 			if ( ! empty( $color['color'] ) ) {
 				// 色はこのクラスでだけの利用なら直接指定でも良いが、他のクラス名で応用できるように一旦css変数に格納している.
 				$dynamic_css .= ':root{ --' . $color['slug'] . ':' . $color['color'] . '}';
-				$dynamic_css .= '.has-' . $color['slug'] . '-color { color:var(--' . $color['slug'] . '); }';
-				$dynamic_css .= '.has-' . $color['slug'] . '-background-color { background-color:var(--' . $color['slug'] . '); }';
+				$dynamic_css .= ':root .has-' . $color['slug'] . '-color { color:var(--' . $color['slug'] . '); }';
+				$dynamic_css .= ':root .has-' . $color['slug'] . '-background-color { background-color:var(--' . $color['slug'] . '); }';
 			}
 		}
 
