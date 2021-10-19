@@ -5,7 +5,7 @@
  * @package vektor-inc/vk-color-palette-manager
  * @license GPL-2.0+
  *
- * @version 0.0.10
+ * @version 0.0.11
  */
 
 namespace VektorInc\VK_Color_Palette_Manager;
@@ -139,8 +139,9 @@ class VkColorPaletteManager {
 			if ( ! empty( $color['color'] ) ) {
 				// 色はこのクラスでだけの利用なら直接指定でも良いが、他のクラス名で応用できるように一旦css変数に格納している.
 				$dynamic_css .= ':root{ --' . $color['slug'] . ':' . $color['color'] . '}';
-				$dynamic_css .= '.has-' . $color['slug'] . '-color { color:var(--' . $color['slug'] . '); }';
-				$dynamic_css .= '.has-' . $color['slug'] . '-background-color { background-color:var(--' . $color['slug'] . '); }';
+				// .has- だけだと負けるので :root は迂闊に消さないように注意
+				$dynamic_css .= ':root .has-' . $color['slug'] . '-color { color:var(--' . $color['slug'] . '); }';
+				$dynamic_css .= ':root .has-' . $color['slug'] . '-background-color { background-color:var(--' . $color['slug'] . '); }';
 			}
 		}
 
