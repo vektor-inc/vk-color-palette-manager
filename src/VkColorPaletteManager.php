@@ -5,7 +5,7 @@
  * @package vektor-inc/vk-color-palette-manager
  * @license GPL-2.0+
  *
- * @version 0.0.11
+ * @version 0.0.12
  */
 
 namespace VektorInc\VK_Color_Palette_Manager;
@@ -114,14 +114,16 @@ class VkColorPaletteManager {
 	 */
 	public static function additional_color_palette( $editor_settings, $block_editor_context ) {
 		$add_color = self::add_color_array();
-		$editor_settings['__experimentalFeatures']['color']['palette']['core'] = array_merge(
-			$editor_settings['__experimentalFeatures']['color']['palette']['core'],
-			$add_color
-		);
-		$editor_settings['colors'] = array_merge(
-			$editor_settings['colors'],
-			$add_color
-		);
+		if ( ! empty( $add_color ) ) {
+			$editor_settings['__experimentalFeatures']['color']['palette']['core'] = array_merge(
+				$editor_settings['__experimentalFeatures']['color']['palette']['core'],
+				$add_color
+			);
+			$editor_settings['colors'] = array_merge(
+				$editor_settings['colors'],
+				$add_color
+			);
+		}
 		return $editor_settings;
 	}
 
