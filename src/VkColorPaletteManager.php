@@ -5,7 +5,7 @@
  * @package vektor-inc/vk-color-palette-manager
  * @license GPL-2.0+
  *
- * @version 0.0.13
+ * @version 0.0.14
  */
 
 namespace VektorInc\VK_Color_Palette_Manager;
@@ -27,7 +27,7 @@ class VkColorPaletteManager {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'add_color_palette_css' ), 11 );
 		// 11 指定が無いと先に読み込んでしまって効かない
 		add_action( 'enqueue_block_editor_assets', array( __CLASS__, 'add_color_palette_css_to_editor' ), 11 );
-		load_textdomain( 'vk-color-palette-manager', dirname( __FILE__ ) . '/languages/vk-color-palette-manager-'.get_locale().'.mo' );
+		load_textdomain( 'vk-color-palette-manager', dirname( __FILE__ ) . '/languages/vk-color-palette-manager-' . get_locale() . '.mo' );
 	}
 
 	/**
