@@ -116,13 +116,19 @@ class VkColorPaletteManager {
 	public static function additional_color_palette( $editor_settings, $block_editor_context ) {
 		$add_color = self::add_color_array();
 		if ( ! empty( $add_color ) ) {
-			if ( ! empty( $editor_settings['__experimentalFeatures']['color']['palette']['core'] ) ) {
+			if ( ! empty( $editor_settings['__experimentalFeatures']['color']['palette']['default'] ) ) {
+				$editor_settings['__experimentalFeatures']['color']['palette']['default'] = array_merge(
+					$editor_settings['__experimentalFeatures']['color']['palette']['default'],
+					$add_color
+				);
+			} elseif ( ! empty( $editor_settings['__experimentalFeatures']['color']['palette']['core'] ) ) {
 				$editor_settings['__experimentalFeatures']['color']['palette']['core'] = array_merge(
 					$editor_settings['__experimentalFeatures']['color']['palette']['core'],
 					$add_color
 				);
 			} else {
-				$editor_settings['__experimentalFeatures']['color']['palette']['core'] = $add_color;
+				$editor_settings['__experimentalFeatures']['color']['palette']['default'] = $add_color;
+				$editor_settings['__experimentalFeatures']['color']['palette']['core']    = $add_color;
 			}
 			$editor_settings['colors'] = array_merge(
 				$editor_settings['colors'],
