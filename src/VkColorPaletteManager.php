@@ -5,7 +5,7 @@
  * @package vektor-inc/vk-color-palette-manager
  * @license GPL-2.0+
  *
- * @version 0.1.0
+ * @version 0.2.0
  */
 
 namespace VektorInc\VK_Color_Palette_Manager;
