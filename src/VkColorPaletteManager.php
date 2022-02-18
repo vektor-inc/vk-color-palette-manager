@@ -155,6 +155,7 @@ class VkColorPaletteManager {
 				// .has- だけだと負けるので :root は迂闊に消さないように注意
 				$dynamic_css .= ':root .has-' . $color['slug'] . '-color { color:var(--' . $color['slug'] . '); }';
 				$dynamic_css .= ':root .has-' . $color['slug'] . '-background-color { background-color:var(--' . $color['slug'] . '); }';
+				$dynamic_css .= ':root .has-' . $color['slug'] . '-border-color { border-color:var(--' . $color['slug'] . '); }';
 			}
 		}
 
