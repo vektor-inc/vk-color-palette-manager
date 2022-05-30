@@ -287,6 +287,7 @@ class VkColorPaletteManager {
 			foreach ( $colors as $color ) {
 				if (
 					is_array( $color ) &&
+					! in_array( $color['name'], array_column( $unique_colors, 'name' ) ) &&
 					! in_array( $color['slug'], array_column( $unique_colors, 'slug' ) ) &&
 					! in_array( $color['color'], array_column( $unique_colors, 'color' ) )
 				) {
