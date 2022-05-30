@@ -211,43 +211,43 @@ class VkColorPaletteManager {
 	public static function get_bootstrap_colors() {
 		$colors = array(
 			array(
-				'name'  => __( 'VK Primary Color', 'vk-color-palette-manager' ),
-				'slug'  => 'vk-color-primary',
-				'color' => 'var(--vk-color-primary)',
+				'name'  => __( 'Bootstrap Primary', 'vk-color-palette-manager' ),
+				'slug'  => 'bootstrap-primary',
+				'color' => '#0d6efd',
 			),
 			array(
-				'name'  => __( 'VK Secondary Color', 'vk-color-palette-manager' ),
-				'slug'  => 'vk-color-secondary',
+				'name'  => __( 'Bootstrap Secondary', 'vk-color-palette-manager' ),
+				'slug'  => 'bootstrap-secondary',
 				'color' => '#6c757d',
 			),
 			array(
-				'name'  => __( 'VK Successs Color', 'vk-color-palette-manager' ),
-				'slug'  => 'vk-color-success',
+				'name'  => __( 'Bootstrap Successs', 'vk-color-palette-manager' ),
+				'slug'  => 'bootstrap-success',
 				'color' => '#28a745',
 			),
 			array(
-				'name'  => __( 'VK Info Color', 'vk-color-palette-manager' ),
-				'slug'  => 'vk-color-info',
+				'name'  => __( 'Bootstrap Info', 'vk-color-palette-manager' ),
+				'slug'  => 'bootstrap-info',
 				'color' => '#17a2b8',
 			),
 			array(
-				'name'  => __( 'VK Warning Color', 'vk-color-palette-manager' ),
-				'slug'  => 'vk-color-warning',
+				'name'  => __( 'Bootstrap Warning', 'vk-color-palette-manager' ),
+				'slug'  => 'bootstrap-warning',
 				'color' => '#ffc107',
 			),
 			array(
-				'name'  => __( 'VK Danger Color', 'vk-color-palette-manager' ),
-				'slug'  => 'vk-color-danger',
+				'name'  => __( 'Bootstrap Danger', 'vk-color-palette-manager' ),
+				'slug'  => 'bootstrap-danger',
 				'color' => '#dc3545',
 			),
 			array(
-				'name'  => __( 'VK Light Color', 'vk-color-palette-manager' ),
-				'slug'  => 'vk-color-light',
+				'name'  => __( 'Bootstrap Light', 'vk-color-palette-manager' ),
+				'slug'  => 'bootstrap-light',
 				'color' => '#f8f9fa',
 			),
 			array(
-				'name'  => __( 'VK Dark Color', 'vk-color-palette-manager' ),
-				'slug'  => 'vk-color-dark',
+				'name'  => __( 'Bootstrap Dark', 'vk-color-palette-manager' ),
+				'slug'  => 'bootstrap-dark',
 				'color' => '#343a40',
 			),
 		);
