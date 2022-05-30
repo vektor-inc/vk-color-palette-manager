@@ -211,6 +211,11 @@ class VkColorPaletteManager {
 	public static function get_bootstrap_colors() {
 		$colors = array(
 			array(
+				'name'  => __( 'VK Primary Color', 'vk-color-palette-manager' ),
+				'slug'  => 'vk-color-primary',
+				'color' => 'var(--vk-color-primary)',
+			),
+			array(
 				'name'  => __( 'VK Secondary Color', 'vk-color-palette-manager' ),
 				'slug'  => 'vk-color-secondary',
 				'color' => '#6c757d',
