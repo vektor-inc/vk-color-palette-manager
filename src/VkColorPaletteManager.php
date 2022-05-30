@@ -275,6 +275,27 @@ class VkColorPaletteManager {
 	}
 
 	/**
+	 * Get Unique Colors
+	 *
+	 * @param array $colors colors
+	 */
+	public static function get_unique_colors( $colors ) {
+
+		$unique_colors = array();
+
+		if ( is_array( $colors ) ) {
+			foreach ( $colors as $color ) {
+				if ( is_array( $color ) && ! in_array( $color['slug'], array_column( $unique_colors, 'slug') ) ) {
+					$unique_colors[] = $color;
+				}
+			}
+		}
+
+		return $unique_colors;
+	}
+
+
+	/**
 	 * Add color palettes
 	 *
 	 * @param array $editor_settings : editor_settings.
@@ -288,7 +309,8 @@ class VkColorPaletteManager {
 		$theme_colors = ! empty( $options['theme_color_palette'] ) ? self::get_theme_colors() : array();
 		$bootstrap_colors = ! empty( $options['bootstrap_color_palette'] ) ? self::get_bootstrap_colors() : array();
 		$additional_colors = self::get_additional_colors();
-		$colors = array_merge( $core_colors, $theme_colors, $bootstrap_colors, $additional_colors );
+		$colors = self::get_unique_colors( array_merge( $core_colors, $theme_colors, $bootstrap_colors, $additional_colors ) );
+
 		add_theme_support( 'editor-color-palette', $colors );
 	}
 
@@ -302,7 +324,7 @@ class VkColorPaletteManager {
 
 		$bootstrap_colors = ! empty( $options['bootstrap_color_palette'] ) ? self::get_bootstrap_colors() : array();
 		$additional_colors = self::get_additional_colors();
-		$colors = array_merge( $bootstrap_colors, $additional_colors );
+		$colors = self::get_unique_colors( array_merge( $bootstrap_colors, $additional_colors ) );
 
 		$dynamic_css = '/* VK Color Palettes */';
 		foreach ( $colors as $key => $color ) {
