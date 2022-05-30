@@ -12,6 +12,7 @@ namespace VektorInc\VK_Color_Palette_Manager;
 
 use WP_Customize_Color_Control;
 use VK_Custom_Html_Control;
+use WP_Theme_JSON_Resolver;
 
 /**
  * VK_Color_Palette_Manager
@@ -23,11 +24,38 @@ class VkColorPaletteManager {
 	 */
 	public function __construct() {
 		add_action( 'customize_register', array( __CLASS__, 'customize_register' ) );
-		add_filter( 'block_editor_settings_all', array( __CLASS__, 'additional_color_palette' ), 10, 2 );
+		add_action( 'after_setup_theme', array( __CLASS__, 'setup_color_palette' ), 9999 );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'add_color_palette_css' ), 11 );
 		// 11 指定が無いと先に読み込んでしまって効かない
 		add_action( 'enqueue_block_editor_assets', array( __CLASS__, 'add_color_palette_css_to_editor' ), 11 );
 		load_textdomain( 'vk-color-palette-manager', dirname( __FILE__ ) . '/languages/vk-color-palette-manager-' . get_locale() . '.mo' );
+	}
+
+	/**
+	 * Default Options
+	 */
+	public static function get_option() {
+		$default_options = array(
+			'core_color_palette'  => true,
+			'theme_color_palette' => true,
+			'bootstrap_color_palette' => false,
+		);
+		for ( $i = 1; $i <= 5; $i++ ) {
+			$default_options['color_custom_' . $i ] = '';
+		}
+		$options = get_option( 'vk_color_manager_options' );
+		return wp_parse_args( $options, $default_options );
+	}
+
+	/**
+	 * Sanitize CheckBox
+	 */
+	public static function sanitize_checkbox( $input ) {
+		if ( 'true' === $input || true === $input ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -36,6 +64,63 @@ class VkColorPaletteManager {
 	 * @param object $wp_customize : customize object.
 	 */
 	public static function customize_register( $wp_customize ) {
+
+		$wp_customize->add_setting(
+			'vk_color_manager_options[core_color_palette]',
+			array(
+				'default'           => true,
+				'type'              => 'option',
+				'capability'        => 'edit_theme_options',
+				'sanitize_callback' => array( __CLASS__, 'sanitize_checkbox' ),
+			)
+		);
+		$wp_customize->add_control(
+			'vk_color_manager_options[core_color_palette]',
+			array(
+				'label'    => __( 'Display Core Color Palette.', 'vk-color-palette-manager' ),
+				'section'  => 'colors',
+				'settings' => 'vk_color_manager_options[core_color_palette]',
+				'type'     => 'checkbox',
+			)
+		);
+
+		$wp_customize->add_setting(
+			'vk_color_manager_options[theme_color_palette]',
+			array(
+				'default'           => true,
+				'type'              => 'option',
+				'capability'        => 'edit_theme_options',
+				'sanitize_callback' => array( __CLASS__, 'sanitize_checkbox' ),
+			)
+		);
+		$wp_customize->add_control(
+			'vk_color_manager_options[theme_color_palette]',
+			array(
+				'label'    => __( 'Display Theme Color Palette.', 'vk-color-palette-manager' ),
+				'section'  => 'colors',
+				'settings' => 'vk_color_manager_options[theme_color_palette]',
+				'type'     => 'checkbox',
+			)
+		);
+
+		$wp_customize->add_setting(
+			'vk_color_manager_options[bootstrap_color_palette]',
+			array(
+				'default'           => false,
+				'type'              => 'option',
+				'capability'        => 'edit_theme_options',
+				'sanitize_callback' => array( __CLASS__, 'sanitize_checkbox' ),
+			)
+		);
+		$wp_customize->add_control(
+			'vk_color_manager_options[bootstrap_color_palette]',
+			array(
+				'label'    => __( 'Display Bootstrap Color Palette.', 'vk-color-palette-manager' ),
+				'section'  => 'colors',
+				'settings' => 'vk_color_manager_options[bootstrap_color_palette]',
+				'type'     => 'checkbox',
+			)
+		);
 
 		if ( class_exists( 'VK_Custom_Html_Control' ) ) {
 			$wp_customize->add_setting(
@@ -86,16 +171,91 @@ class VkColorPaletteManager {
 		}
 	}
 
+
 	/**
-	 * Additional color palette array
+	 * Get Core Colors
 	 */
-	public static function add_color_array() {
-		$options_color       = get_option( 'vk_color_manager_options' );
-		$vcm_add_color_array = array();
+	public static function get_core_colors() {
+		$colors = array();
+		if ( class_exists( 'WP_Theme_JSON_Resolver' ) ) {
+			$settings = WP_Theme_JSON_Resolver::get_core_data()->get_settings();
+			if ( ! empty($settings['color']['palette']['default'] ) ) {
+				$colors = $settings['color']['palette']['default'];
+			} else if ( ! empty($settings['color']['palette']['core'] ) ) {
+				$colors = $settings['color']['palette']['core'];
+			}
+		}
+		return $colors;
+	}
+
+	/**
+	 * Get Theme Colors
+	 */
+	public static function get_theme_colors() {
+		$colors = array();
+		if ( class_exists( 'WP_Theme_JSON_Resolver' ) ) {
+			$settings = WP_Theme_JSON_Resolver::get_theme_data()->get_settings();
+			if ( ! empty($settings['color']['palette']['theme'] ) ) {
+				$colors = $settings['color']['palette']['theme'];
+			}
+		}
+		return $colors;
+	}
+
+	/**
+	 * Get Theme Colors
+	 */
+	public static function get_bootstrap_colors() {
+		$colors = array(
+			array(
+				'name'  => __( 'VK Secondary Color', 'vk-color-palette-manager' ),
+				'slug'  => 'vk-color-secondary',
+				'color' => '#6c757d',
+			),
+			array(
+				'name'  => __( 'VK Successs Color', 'vk-color-palette-manager' ),
+				'slug'  => 'vk-color-success',
+				'color' => '#28a745',
+			),
+			array(
+				'name'  => __( 'VK Info Color', 'vk-color-palette-manager' ),
+				'slug'  => 'vk-color-info',
+				'color' => '#17a2b8',
+			),
+			array(
+				'name'  => __( 'VK Warning Color', 'vk-color-palette-manager' ),
+				'slug'  => 'vk-color-warning',
+				'color' => '#ffc107',
+			),
+			array(
+				'name'  => __( 'VK Danger Color', 'vk-color-palette-manager' ),
+				'slug'  => 'vk-color-danger',
+				'color' => '#dc3545',
+			),
+			array(
+				'name'  => __( 'VK Light Color', 'vk-color-palette-manager' ),
+				'slug'  => 'vk-light-danger',
+				'color' => '#f8f9fa',
+			),
+			array(
+				'name'  => __( 'VK Dark Color', 'vk-color-palette-manager' ),
+				'slug'  => 'vk-dark-danger',
+				'color' => '#343a40',
+			),
+		);
+		return $colors;
+	}
+
+	/**
+	 * Get Additional Colors
+	 */
+	public static function get_additional_colors() {
+		$options_color       = self::get_option();
+		$additional_colors = array();
 		if ( $options_color ) {
 			for ( $i = 1; $i <= 5; $i++ ) {
 				if ( ! empty( $options_color[ 'color_custom_' . $i ] ) ) {
-					$vcm_add_color_array[] = array(
+					$additional_colors[] = array(
 						'name'  => __( 'Custom color', 'vk-color-palette-manager' ) . ' ' . $i,
 						'slug'  => 'vk-color-custom-' . $i,
 						'color' => $options_color[ 'color_custom_' . $i ],
@@ -103,7 +263,7 @@ class VkColorPaletteManager {
 				}
 			}
 		}
-		return apply_filters( 'vcm_add_color_array', $vcm_add_color_array );
+		return apply_filters( 'vcm_add_color_array', $additional_colors );
 	}
 
 	/**
@@ -113,29 +273,15 @@ class VkColorPaletteManager {
 	 * @param array $block_editor_context : block_editor_context.
 	 * @return array $editor_settings :  editor_settings.
 	 */
-	public static function additional_color_palette( $editor_settings, $block_editor_context ) {
-		$add_color = self::add_color_array();
-		if ( ! empty( $add_color ) ) {
-			if ( ! empty( $editor_settings['__experimentalFeatures']['color']['palette']['default'] ) ) {
-				$editor_settings['__experimentalFeatures']['color']['palette']['default'] = array_merge(
-					$editor_settings['__experimentalFeatures']['color']['palette']['default'],
-					$add_color
-				);
-			} elseif ( ! empty( $editor_settings['__experimentalFeatures']['color']['palette']['core'] ) ) {
-				$editor_settings['__experimentalFeatures']['color']['palette']['core'] = array_merge(
-					$editor_settings['__experimentalFeatures']['color']['palette']['core'],
-					$add_color
-				);
-			} else {
-				$editor_settings['__experimentalFeatures']['color']['palette']['default'] = $add_color;
-				$editor_settings['__experimentalFeatures']['color']['palette']['core']    = $add_color;
-			}
-			$editor_settings['colors'] = array_merge(
-				$editor_settings['colors'],
-				$add_color
-			);
-		}
-		return $editor_settings;
+	public static function setup_color_palette() {
+		$options = self::get_option();
+
+		$core_colors  = ! empty( $options['core_color_palette'] ) ? self::get_core_colors() : array();
+		$theme_colors = ! empty( $options['theme_color_palette'] ) ? self::get_theme_colors() : array();
+		$bootstrap_colors = ! empty( $options['bootstrap_color_palette'] ) ? self::get_bootstrap_colors() : array();
+		$additional_colors = self::get_additional_colors();
+		$colors = array_merge( $core_colors, $theme_colors, $bootstrap_colors, $additional_colors );
+		add_theme_support( 'editor-color-palette', $colors );
 	}
 
 	/**
@@ -144,8 +290,11 @@ class VkColorPaletteManager {
 	 * @return string
 	 */
 	public static function inline_css() {
-		$options_color = get_option( 'vk_color_manager_options' );
-		$colors        = self::add_color_array();
+		$options = self::get_option();
+		
+		$bootstrap_colors = ! empty( $options['bootstrap_color_palette'] ) ? self::get_bootstrap_colors() : array();
+		$additional_colors = self::get_additional_colors();
+		$colors = array_merge( $bootstrap_colors, $additional_colors );
 
 		$dynamic_css = '/* VK Color Palettes */';
 		foreach ( $colors as $key => $color ) {
