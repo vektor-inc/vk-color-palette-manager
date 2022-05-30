@@ -65,6 +65,7 @@ class VkColorPaletteManager {
 	 */
 	public static function customize_register( $wp_customize ) {
 
+		// Display Core Color Palette
 		$wp_customize->add_setting(
 			'vk_color_manager_options[core_color_palette]',
 			array(
@@ -77,13 +78,14 @@ class VkColorPaletteManager {
 		$wp_customize->add_control(
 			'vk_color_manager_options[core_color_palette]',
 			array(
-				'label'    => __( 'Display Core Color Palette.', 'vk-color-palette-manager' ),
+				'label'    => __( 'Display Core Color Palette', 'vk-color-palette-manager' ),
 				'section'  => 'colors',
 				'settings' => 'vk_color_manager_options[core_color_palette]',
 				'type'     => 'checkbox',
 			)
 		);
 
+		// Display Theme Color Palette
 		$wp_customize->add_setting(
 			'vk_color_manager_options[theme_color_palette]',
 			array(
@@ -96,13 +98,14 @@ class VkColorPaletteManager {
 		$wp_customize->add_control(
 			'vk_color_manager_options[theme_color_palette]',
 			array(
-				'label'    => __( 'Display Theme Color Palette.', 'vk-color-palette-manager' ),
+				'label'    => __( 'Display Theme Color Palette', 'vk-color-palette-manager' ),
 				'section'  => 'colors',
 				'settings' => 'vk_color_manager_options[theme_color_palette]',
 				'type'     => 'checkbox',
 			)
 		);
 
+		// Display Bootstrap Color Palette
 		$wp_customize->add_setting(
 			'vk_color_manager_options[bootstrap_color_palette]',
 			array(
@@ -115,7 +118,7 @@ class VkColorPaletteManager {
 		$wp_customize->add_control(
 			'vk_color_manager_options[bootstrap_color_palette]',
 			array(
-				'label'    => __( 'Display Bootstrap Color Palette.', 'vk-color-palette-manager' ),
+				'label'    => __( 'Display Bootstrap Color Palette', 'vk-color-palette-manager' ),
 				'section'  => 'colors',
 				'settings' => 'vk_color_manager_options[bootstrap_color_palette]',
 				'type'     => 'checkbox',
@@ -203,7 +206,7 @@ class VkColorPaletteManager {
 	}
 
 	/**
-	 * Get Theme Colors
+	 * Get Bootstrap Colors
 	 */
 	public static function get_bootstrap_colors() {
 		$colors = array(
@@ -291,7 +294,7 @@ class VkColorPaletteManager {
 	 */
 	public static function inline_css() {
 		$options = self::get_option();
-		
+
 		$bootstrap_colors = ! empty( $options['bootstrap_color_palette'] ) ? self::get_bootstrap_colors() : array();
 		$additional_colors = self::get_additional_colors();
 		$colors = array_merge( $bootstrap_colors, $additional_colors );
