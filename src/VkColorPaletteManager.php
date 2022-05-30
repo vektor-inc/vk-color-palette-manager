@@ -242,12 +242,12 @@ class VkColorPaletteManager {
 			),
 			array(
 				'name'  => __( 'VK Light Color', 'vk-color-palette-manager' ),
-				'slug'  => 'vk-light-danger',
+				'slug'  => 'vk-color-light',
 				'color' => '#f8f9fa',
 			),
 			array(
 				'name'  => __( 'VK Dark Color', 'vk-color-palette-manager' ),
-				'slug'  => 'vk-dark-danger',
+				'slug'  => 'vk-color-dark',
 				'color' => '#343a40',
 			),
 		);
