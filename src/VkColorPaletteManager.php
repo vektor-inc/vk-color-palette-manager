@@ -36,12 +36,12 @@ class VkColorPaletteManager {
 	 */
 	public static function get_option() {
 		$default_options = array(
-			'core_color_palette'  => true,
-			'theme_color_palette' => true,
+			'core_color_palette'      => true,
+			'theme_color_palette'     => true,
 			'bootstrap_color_palette' => false,
 		);
 		for ( $i = 1; $i <= 5; $i++ ) {
-			$default_options['color_custom_' . $i ] = '';
+			$default_options[ 'color_custom_' . $i ] = '';
 		}
 		$options = get_option( 'vk_color_manager_options' );
 		return wp_parse_args( $options, $default_options );
@@ -49,6 +49,9 @@ class VkColorPaletteManager {
 
 	/**
 	 * Sanitize CheckBox
+	 *
+	 * @param bool $input .
+	 * @return bool
 	 */
 	public static function sanitize_checkbox( $input ) {
 		if ( 'true' === $input || true === $input ) {
@@ -65,7 +68,7 @@ class VkColorPaletteManager {
 	 */
 	public static function customize_register( $wp_customize ) {
 
-		// Display Core Color Palette
+		// Display Core Color Palette.
 		$wp_customize->add_setting(
 			'vk_color_manager_options[core_color_palette]',
 			array(
@@ -85,7 +88,7 @@ class VkColorPaletteManager {
 			)
 		);
 
-		// Display Theme Color Palette
+		// Display Theme Color Palette.
 		$wp_customize->add_setting(
 			'vk_color_manager_options[theme_color_palette]',
 			array(
@@ -105,7 +108,7 @@ class VkColorPaletteManager {
 			)
 		);
 
-		// Display Bootstrap Color Palette
+		// Display Bootstrap Color Palette.
 		$wp_customize->add_setting(
 			'vk_color_manager_options[bootstrap_color_palette]',
 			array(
@@ -182,9 +185,9 @@ class VkColorPaletteManager {
 		$colors = array();
 		if ( class_exists( 'WP_Theme_JSON_Resolver' ) ) {
 			$settings = WP_Theme_JSON_Resolver::get_core_data()->get_settings();
-			if ( ! empty($settings['color']['palette']['default'] ) ) {
+			if ( ! empty( $settings['color']['palette']['default'] ) ) {
 				$colors = $settings['color']['palette']['default'];
-			} else if ( ! empty($settings['color']['palette']['core'] ) ) {
+			} elseif ( ! empty( $settings['color']['palette']['core'] ) ) {
 				$colors = $settings['color']['palette']['core'];
 			}
 		}
@@ -198,7 +201,7 @@ class VkColorPaletteManager {
 		$colors = array();
 		if ( class_exists( 'WP_Theme_JSON_Resolver' ) ) {
 			$settings = WP_Theme_JSON_Resolver::get_theme_data()->get_settings();
-			if ( ! empty($settings['color']['palette']['theme'] ) ) {
+			if ( ! empty( $settings['color']['palette']['theme'] ) ) {
 				$colors = $settings['color']['palette']['theme'];
 			}
 		}
@@ -258,7 +261,7 @@ class VkColorPaletteManager {
 	 * Get Additional Colors
 	 */
 	public static function get_additional_colors() {
-		$options_color       = self::get_option();
+		$options_color     = self::get_option();
 		$additional_colors = array();
 		if ( $options_color ) {
 			for ( $i = 1; $i <= 5; $i++ ) {
@@ -302,19 +305,15 @@ class VkColorPaletteManager {
 
 	/**
 	 * Add color palettes
-	 *
-	 * @param array $editor_settings : editor_settings.
-	 * @param array $block_editor_context : block_editor_context.
-	 * @return array $editor_settings :  editor_settings.
 	 */
 	public static function setup_color_palette() {
 		$options = self::get_option();
 
-		$core_colors  = ! empty( $options['core_color_palette'] ) ? self::get_core_colors() : array();
-		$theme_colors = ! empty( $options['theme_color_palette'] ) ? self::get_theme_colors() : array();
-		$bootstrap_colors = ! empty( $options['bootstrap_color_palette'] ) ? self::get_bootstrap_colors() : array();
+		$core_colors       = ! empty( $options['core_color_palette'] ) ? self::get_core_colors() : array();
+		$theme_colors      = ! empty( $options['theme_color_palette'] ) ? self::get_theme_colors() : array();
+		$bootstrap_colors  = ! empty( $options['bootstrap_color_palette'] ) ? self::get_bootstrap_colors() : array();
 		$additional_colors = self::get_additional_colors();
-		$colors = self::get_unique_colors( array_merge( $core_colors, $theme_colors, $bootstrap_colors, $additional_colors ) );
+		$colors            = self::get_unique_colors( array_merge( $core_colors, $theme_colors, $bootstrap_colors, $additional_colors ) );
 
 		add_theme_support( 'editor-color-palette', $colors );
 	}
@@ -327,9 +326,9 @@ class VkColorPaletteManager {
 	public static function inline_css() {
 		$options = self::get_option();
 
-		$bootstrap_colors = ! empty( $options['bootstrap_color_palette'] ) ? self::get_bootstrap_colors() : array();
+		$bootstrap_colors  = ! empty( $options['bootstrap_color_palette'] ) ? self::get_bootstrap_colors() : array();
 		$additional_colors = self::get_additional_colors();
-		$colors = self::get_unique_colors( array_merge( $bootstrap_colors, $additional_colors ) );
+		$colors            = self::get_unique_colors( array_merge( $bootstrap_colors, $additional_colors ) );
 
 		$dynamic_css = '/* VK Color Palettes */';
 		foreach ( $colors as $key => $color ) {
