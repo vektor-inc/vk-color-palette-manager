@@ -212,10 +212,15 @@ class VkColorPaletteManager {
 	public static function get_core_colors() {
 		$colors = array();
 		if ( class_exists( 'WP_Theme_JSON_Resolver' ) ) {
+			// コアのセッティングを取得.
 			$settings = WP_Theme_JSON_Resolver::get_core_data()->get_settings();
+			// デフォルトパレットが存在していたら.
 			if ( ! empty( $settings['color']['palette']['default'] ) ) {
+				// デフォルトのカラーを挿入.
 				$colors = $settings['color']['palette']['default'];
 			} elseif ( ! empty( $settings['color']['palette']['core'] ) ) {
+				// コアのカラーを挿入.
+				// こあのカラーとは？どの条件で入る？ .
 				$colors = $settings['color']['palette']['core'];
 			}
 		}
@@ -228,7 +233,9 @@ class VkColorPaletteManager {
 	public static function get_theme_colors() {
 		$colors = array();
 		if ( class_exists( 'WP_Theme_JSON_Resolver' ) ) {
+			// テーマのデータを取得 .
 			$settings = WP_Theme_JSON_Resolver::get_theme_data()->get_settings();
+			// ※ $settings['color']['palette']['theme'] はコアのパレットなど、概ねすべて結合された状態で落ちてくる .
 			if ( ! empty( $settings['color']['palette']['theme'] ) ) {
 				$colors = $settings['color']['palette']['theme'];
 			}
@@ -238,6 +245,8 @@ class VkColorPaletteManager {
 
 	/**
 	 * Get Bootstrap Colors
+	 *
+	 * @return array Bootstrapの配列 .
 	 */
 	public static function get_bootstrap_colors() {
 		$colors = array(
@@ -287,6 +296,10 @@ class VkColorPaletteManager {
 
 	/**
 	 * Get Additional Colors
+	 *
+	 * カスタマイザーから追加する 1 〜 5 のカスタムカラー
+	 *
+	 * @return array カスタムカラーの配列 .
 	 */
 	public static function get_additional_colors() {
 		$options_color     = self::get_option();
@@ -307,8 +320,9 @@ class VkColorPaletteManager {
 
 	/**
 	 * Get Unique Colors
+	 * 色配列に同じ色がある場合に重複して出力しないように配列を加工する
 	 *
-	 * @param array $colors colors
+	 * @param array $colors colors.
 	 */
 	public static function get_unique_colors( $colors ) {
 
@@ -330,18 +344,21 @@ class VkColorPaletteManager {
 		return $unique_colors;
 	}
 
-
 	/**
 	 * Add color palettes
+	 * 生成したカラーパレット配列を合成・単一化してカラーパレットに登録
+	 *
+	 * @return void
 	 */
 	public static function setup_color_palette() {
-		$options = self::get_option();
-
-		$core_colors       = ! empty( $options['core_color_palette'] ) ? self::get_core_colors() : array();
-		$theme_colors      = ! empty( $options['theme_color_palette'] ) ? self::get_theme_colors() : array();
-		$bootstrap_colors  = ! empty( $options['bootstrap_color_palette'] ) ? self::get_bootstrap_colors() : array();
+		$options          = self::get_option();
+		$core_colors      = ! empty( $options['core_color_palette'] ) ? self::get_core_colors() : array();
+		$theme_colors     = ! empty( $options['theme_color_palette'] ) ? self::get_theme_colors() : array();
+		$bootstrap_colors = ! empty( $options['bootstrap_color_palette'] ) ? self::get_bootstrap_colors() : array();
+		// 1 - 5 のカスタムカラー
 		$additional_colors = self::get_additional_colors();
-		$colors            = self::get_unique_colors( array_merge( $core_colors, $theme_colors, $bootstrap_colors, $additional_colors ) );
+		// 色の重複を整理 .
+		$colors = self::get_unique_colors( array_merge( $core_colors, $theme_colors, $bootstrap_colors, $additional_colors ) );
 
 		add_theme_support( 'editor-color-palette', $colors );
 	}
