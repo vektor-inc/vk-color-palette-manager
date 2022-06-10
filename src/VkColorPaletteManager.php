@@ -67,55 +67,57 @@ class VkColorPaletteManager {
 	 * @param object $wp_customize : customize object.
 	 */
 	public static function customize_register( $wp_customize ) {
-		if ( class_exists( 'VK_Custom_Html_Control' ) ) {
-			$wp_customize->add_setting(
-				'color_palette_title',
-				array(
-					'sanitize_callback' => 'sanitize_text_field',
-				)
-			);
-			$wp_customize->add_control(
-				new VK_Custom_Html_Control(
-					$wp_customize,
+		if ( WP_Theme_JSON_Resolver::theme_has_support() )  {
+			// theme.json がある場合
+			if ( class_exists( 'VK_Custom_Html_Control' ) ) {
+				$wp_customize->add_setting(
 					'color_palette_title',
 					array(
-						'label'            => __( 'Editor Color Palette Setting', 'vk-color-palette-manager' ),
-						'section'          => 'colors',
-						'type'             => 'text',
-						'custom_title_sub' => __( 'Display Color Setting', 'vk-color-palette-manager' ),
-						'custom_html'      => __( 'エディターのカラーパレットに反映させる色のグループを選択してください。', 'vk-color-palette-manager' ),
-						'priority'         => 1000,
+						'sanitize_callback' => 'sanitize_text_field',
 					)
-				)
-			);
+				);
+				$wp_customize->add_control(
+					new VK_Custom_Html_Control(
+						$wp_customize,
+						'color_palette_title',
+						array(
+							'label'            => __( 'Editor Color Palette Setting', 'vk-color-palette-manager' ),
+							'section'          => 'colors',
+							'type'             => 'text',
+							'custom_title_sub' => '',
+							'custom_html'      => __( 'If you use a theme with theme.json, custom color settings etc. will not be displayed. If you want to add or change any color, you can customize the color from Appearance> Editor screen style.', 'vk-color-palette-manager' ),
+							'priority'         => 1000,
+						)
+					)
+				);
+			}
+		} else {
+			if ( class_exists( 'VK_Custom_Html_Control' ) ) {
+				$wp_customize->add_setting(
+					'color_palette_title',
+					array(
+						'sanitize_callback' => 'sanitize_text_field',
+					)
+				);
+				$wp_customize->add_control(
+					new VK_Custom_Html_Control(
+						$wp_customize,
+						'color_palette_title',
+						array(
+							'label'            => __( 'Editor Color Palette Setting', 'vk-color-palette-manager' ),
+							'section'          => 'colors',
+							'type'             => 'text',
+							'custom_title_sub' => __( 'Display Color Setting', 'vk-color-palette-manager' ),
+							'custom_html'      => __( 'Select a group of colors to reflect in the editor\'s color palette.', 'vk-color-palette-manager' ),
+							'priority'         => 1000,
+						)
+					)
+				);
+			}
 
-		}
-
-		// Display Core Color Palette.
-		$wp_customize->add_setting(
-			'vk_color_manager_options[core_color_palette]',
-			array(
-				'default'           => true,
-				'type'              => 'option',
-				'capability'        => 'edit_theme_options',
-				'sanitize_callback' => array( __CLASS__, 'sanitize_checkbox' ),
-			)
-		);
-		$wp_customize->add_control(
-			'vk_color_manager_options[core_color_palette]',
-			array(
-				'label'    => __( 'WordPress Standard Color Palette', 'vk-color-palette-manager' ),
-				'section'  => 'colors',
-				'settings' => 'vk_color_manager_options[core_color_palette]',
-				'type'     => 'checkbox',
-				'priority' => 1000,
-			)
-		);
-
-		if ( self::get_theme_colors() ) {
-			// Display Theme Color Palette.
+			// Display Core Color Palette.
 			$wp_customize->add_setting(
-				'vk_color_manager_options[theme_color_palette]',
+				'vk_color_manager_options[core_color_palette]',
 				array(
 					'default'           => true,
 					'type'              => 'option',
@@ -124,84 +126,107 @@ class VkColorPaletteManager {
 				)
 			);
 			$wp_customize->add_control(
-				'vk_color_manager_options[theme_color_palette]',
+				'vk_color_manager_options[core_color_palette]',
 				array(
-					'label'    => __( 'Display Theme Color Palette', 'vk-color-palette-manager' ),
+					'label'    => __( 'WordPress Standard Color Palette', 'vk-color-palette-manager' ),
 					'section'  => 'colors',
-					'settings' => 'vk_color_manager_options[theme_color_palette]',
+					'settings' => 'vk_color_manager_options[core_color_palette]',
 					'type'     => 'checkbox',
 					'priority' => 1000,
 				)
 			);
-		}
 
-		// Display Bootstrap Color Palette.
-		$wp_customize->add_setting(
-			'vk_color_manager_options[bootstrap_color_palette]',
-			array(
-				'default'           => false,
-				'type'              => 'option',
-				'capability'        => 'edit_theme_options',
-				'sanitize_callback' => array( __CLASS__, 'sanitize_checkbox' ),
-			)
-		);
-		$wp_customize->add_control(
-			'vk_color_manager_options[bootstrap_color_palette]',
-			array(
-				'label'    => __( 'Bootstrap Color Palette', 'vk-color-palette-manager' ),
-				'section'  => 'colors',
-				'settings' => 'vk_color_manager_options[bootstrap_color_palette]',
-				'type'     => 'checkbox',
-				'priority' => 1000,
-			)
-		);
-
-		if ( class_exists( 'VK_Custom_Html_Control' ) ) {
-			$wp_customize->add_setting(
-				'color_palette_custom_title',
-				array(
-					'sanitize_callback' => 'sanitize_text_field',
-				)
-			);
-			$wp_customize->add_control(
-				new VK_Custom_Html_Control(
-					$wp_customize,
-					'color_palette_custom_title',
+			if ( self::get_theme_colors() ) {
+				// Display Theme Color Palette.
+				$wp_customize->add_setting(
+					'vk_color_manager_options[theme_color_palette]',
 					array(
-						'label'            => '',
-						'section'          => 'colors',
-						'type'             => 'text',
-						'custom_title_sub' => __( 'Custom Color Palette Setting', 'vk-color-palette-manager' ),
-						'custom_html'      => __( 'This color is reflected in the block editor\'s color palette.', 'vk-color-palette-manager' ),
-						'priority'         => 1000,
+						'default'           => true,
+						'type'              => 'option',
+						'capability'        => 'edit_theme_options',
+						'sanitize_callback' => array( __CLASS__, 'sanitize_checkbox' ),
 					)
-				)
-			);
-		}
-
-		for ( $i = 1; $i <= 5; $i++ ) {
-			$wp_customize->add_setting(
-				'vk_color_manager_options[color_custom_' . $i . ']',
-				array(
-					'default'           => '',
-					'type'              => 'option',
-					'capability'        => 'edit_theme_options',
-					'sanitize_callback' => 'sanitize_hex_color',
-				)
-			);
-			$label = __( 'Custom color', 'vk-color-palette-manager' ) . ' ' . $i;
-			$wp_customize->add_control(
-				new WP_Customize_Color_Control(
-					$wp_customize,
-					'vk_color_manager_options[color_custom_' . $i . ']',
+				);
+				$wp_customize->add_control(
+					'vk_color_manager_options[theme_color_palette]',
 					array(
-						'label'    => $label,
+						'label'    => __( 'Display Theme Color Palette', 'vk-color-palette-manager' ),
 						'section'  => 'colors',
-						'settings' => 'vk_color_manager_options[color_custom_' . $i . ']',
+						'settings' => 'vk_color_manager_options[theme_color_palette]',
+						'type'     => 'checkbox',
 						'priority' => 1000,
 					)
+				);
+			}
+
+			// Display Bootstrap Color Palette.
+			$wp_customize->add_setting(
+				'vk_color_manager_options[bootstrap_color_palette]',
+				array(
+					'default'           => false,
+					'type'              => 'option',
+					'capability'        => 'edit_theme_options',
+					'sanitize_callback' => array( __CLASS__, 'sanitize_checkbox' ),
 				)
 			);
+			$wp_customize->add_control(
+				'vk_color_manager_options[bootstrap_color_palette]',
+				array(
+					'label'    => __( 'Bootstrap Color Palette', 'vk-color-palette-manager' ),
+					'section'  => 'colors',
+					'settings' => 'vk_color_manager_options[bootstrap_color_palette]',
+					'type'     => 'checkbox',
+					'priority' => 1000,
+				)
+			);
+
+			if ( class_exists( 'VK_Custom_Html_Control' ) ) {
+				$wp_customize->add_setting(
+					'color_palette_custom_title',
+					array(
+						'sanitize_callback' => 'sanitize_text_field',
+					)
+				);
+				$wp_customize->add_control(
+					new VK_Custom_Html_Control(
+						$wp_customize,
+						'color_palette_custom_title',
+						array(
+							'label'            => '',
+							'section'          => 'colors',
+							'type'             => 'text',
+							'custom_title_sub' => __( 'Custom Color Palette Setting', 'vk-color-palette-manager' ),
+							'custom_html'      => __( 'This color is reflected in the block editor\'s color palette.', 'vk-color-palette-manager' ),
+							'priority'         => 1000,
+						)
+					)
+				);
+			}
+
+			for ( $i = 1; $i <= 5; $i++ ) {
+				$wp_customize->add_setting(
+					'vk_color_manager_options[color_custom_' . $i . ']',
+					array(
+						'default'           => '',
+						'type'              => 'option',
+						'capability'        => 'edit_theme_options',
+						'sanitize_callback' => 'sanitize_hex_color',
+					)
+				);
+				$label = __( 'Custom color', 'vk-color-palette-manager' ) . ' ' . $i;
+				$wp_customize->add_control(
+					new WP_Customize_Color_Control(
+						$wp_customize,
+						'vk_color_manager_options[color_custom_' . $i . ']',
+						array(
+							'label'    => $label,
+							'section'  => 'colors',
+							'settings' => 'vk_color_manager_options[color_custom_' . $i . ']',
+							'priority' => 1000,
+						)
+					)
+				);
+			}
 		}
 	}
 
