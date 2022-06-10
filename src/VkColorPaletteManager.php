@@ -220,7 +220,7 @@ class VkColorPaletteManager {
 				$colors = $settings['color']['palette']['default'];
 			} elseif ( ! empty( $settings['color']['palette']['core'] ) ) {
 				// コアのカラーを挿入.
-				// こあのカラーとは？どの条件で入る？ .
+				// こあのカラーとは？どの条件で入る？ → WordPress 5.7 とか 5.8 とか.
 				$colors = $settings['color']['palette']['core'];
 			}
 		}
