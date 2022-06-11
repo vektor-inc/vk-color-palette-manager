@@ -150,11 +150,12 @@ class VkColorPaletteManager {
 				$wp_customize->add_control(
 					'vk_color_manager_options[color_palette_theme]',
 					array(
-						'label'    => __( 'Theme Color', 'vk-color-palette-manager' ),
+						'label'    => __( 'Theme Color (Classic)', 'vk-color-palette-manager' ),
 						'section'  => 'colors',
 						'settings' => 'vk_color_manager_options[color_palette_theme]',
 						'type'     => 'checkbox',
 						'priority' => 1000,
+						'description' => '※ theme.json で指定されたカラーはチェックをはずしても非表示にできません。',
 					)
 				);
 			}
