@@ -93,7 +93,7 @@ class VkColorPaletteManager {
 	public static function customize_register( $wp_customize ) {
 		// theme.json の色に関するデータの配列を取得
 		$json_color_setting = self::get_theme_json_color_settings();
-		
+
 		// theme.json で color.palette がある場合この設定は一切効かなくなる.
 		if ( isset( $json_color_setting['palette'] ) ) {
 			if ( class_exists( 'VK_Custom_Html_Control' ) ) {
@@ -184,7 +184,6 @@ class VkColorPaletteManager {
 						'settings' => 'vk_color_manager_options[color_palette_theme]',
 						'type'     => 'checkbox',
 						'priority' => 1000,
-						'description' => '※ theme.json で指定されたカラーはチェックをはずしても非表示にできません。',
 					)
 				);
 			}
