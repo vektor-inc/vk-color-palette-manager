@@ -98,7 +98,7 @@ class VkColorPaletteManager {
 		// theme.json の色に関するデータの配列を取得
 		$color_setting = self::get_theme_json_color_settings();
 
-		// theme.json で color.palette がある場合この設定は一切効かなくなる.
+		// theme.json で settings.color.palette がある場合この設定は一切効かなくなる.
 		if ( isset( $color_setting['palette'] ) ) {
 			if ( class_exists( 'VK_Custom_Html_Control' ) ) {
 				$wp_customize->add_setting(
