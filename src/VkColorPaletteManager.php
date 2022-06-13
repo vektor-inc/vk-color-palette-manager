@@ -116,7 +116,7 @@ class VkColorPaletteManager {
 							'section'          => 'colors',
 							'type'             => 'text',
 							'custom_title_sub' => '',
-							'custom_html'      => __( 'If you use a theme with theme.json, custom color settings etc. will not be displayed. If you want to add or change any color, you can customize the color from Appearance> Editor screen style.', 'vk-color-palette-manager' ),
+							'custom_html'      => __( 'If you defined color.palette on theme.json, custom color settings etc. will not be displayed. If you want to add or change any color, you can customize the color from Appearance> Editor screen style.', 'vk-color-palette-manager' ),
 							'priority'         => 1000,
 						)
 					)
