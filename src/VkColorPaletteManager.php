@@ -62,13 +62,40 @@ class VkColorPaletteManager {
 	}
 
 	/**
+	 * Get Theme JSON Color Setting
+	 *
+	 * @return array
+	 */
+	public static function get_theme_json_color_settings() {
+		$theme_json    = get_stylesheet_directory() . '/theme.json';
+		$template_json = get_template_directory() . '/theme.json';
+		$json_data = array();
+		if ( $theme_json ) {
+			$theme_json_data = wp_json_file_decode($theme_json, array( 'associative' => true ) );
+			if ( is_array( $theme_json_data ) ) {
+				$json_data = array_merge( $json_data, $theme_json_data );
+			}
+		}
+		if ( wp_get_theme()->parent() && $template_json ) {
+			$template_json_data = wp_json_file_decode( $template_json, array( 'associative' => true ) );
+			if ( is_array( $template_json_data ) ) {
+				$json_data = array_merge( $json_data, $template_json_data );
+			}
+		}
+		return $json_data['settings']['color'];
+	}
+
+	/**
 	 * Customizer
 	 *
 	 * @param object $wp_customize : customize object.
 	 */
 	public static function customize_register( $wp_customize ) {
-		if ( WP_Theme_JSON_Resolver::theme_has_support() ) {
-			// theme.json がある場合
+		// theme.json の色に関するデータの配列を取得
+		$json_color_setting = self::get_theme_json_color_settings();
+		
+		// theme.json で color.palette がある場合この設定は一切効かなくなる.
+		if ( isset( $json_color_setting['palette'] ) ) {
 			if ( class_exists( 'VK_Custom_Html_Control' ) ) {
 				$wp_customize->add_setting(
 					'color_palette_title',
@@ -114,27 +141,29 @@ class VkColorPaletteManager {
 					)
 				);
 			}
-
-			// Display Core Color.
-			$wp_customize->add_setting(
-				'vk_color_manager_options[color_palette_core]',
-				array(
-					'default'           => true,
-					'type'              => 'option',
-					'capability'        => 'edit_theme_options',
-					'sanitize_callback' => array( __CLASS__, 'sanitize_checkbox' ),
-				)
-			);
-			$wp_customize->add_control(
-				'vk_color_manager_options[color_palette_core]',
-				array(
-					'label'    => __( 'WordPress Standard Color', 'vk-color-palette-manager' ),
-					'section'  => 'colors',
-					'settings' => 'vk_color_manager_options[color_palette_core]',
-					'type'     => 'checkbox',
-					'priority' => 1000,
-				)
-			);
+			// theme.json で color.defaultPalette がある場合そちらが優先される模様.
+			if ( ! isset( $json_color_setting['defaultPalette'] ) ) {				
+				// Display Core Color.
+				$wp_customize->add_setting(
+					'vk_color_manager_options[color_palette_core]',
+					array(
+						'default'           => true,
+						'type'              => 'option',
+						'capability'        => 'edit_theme_options',
+						'sanitize_callback' => array( __CLASS__, 'sanitize_checkbox' ),
+					)
+				);
+				$wp_customize->add_control(
+					'vk_color_manager_options[color_palette_core]',
+					array(
+						'label'    => __( 'WordPress Standard Color', 'vk-color-palette-manager' ),
+						'section'  => 'colors',
+						'settings' => 'vk_color_manager_options[color_palette_core]',
+						'type'     => 'checkbox',
+						'priority' => 1000,
+					)
+				);
+			}
 
 			if ( self::get_theme_colors() ) {
 				// Display Theme Color.
