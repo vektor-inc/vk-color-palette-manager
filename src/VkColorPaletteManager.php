@@ -141,8 +141,8 @@ class VkColorPaletteManager {
 					)
 				);
 			}
-			// theme.json で color.defaultPalette がある場合そちらが優先される模様.
-			if ( ! isset( $json_color_setting['defaultPalette'] ) ) {				
+			// theme.json がある場合自動的に ON / OFF が決定される
+			if ( WP_Theme_JSON_Resolver::theme_has_support() ) {				
 				// Display Core Color.
 				$wp_customize->add_setting(
 					'vk_color_manager_options[color_palette_core]',
