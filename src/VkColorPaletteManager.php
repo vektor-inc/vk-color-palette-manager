@@ -67,6 +67,7 @@ class VkColorPaletteManager {
 	 * @return array
 	 */
 	public static function get_theme_json_color_settings() {
+		$color_setting = array();
 		$theme_json    = get_stylesheet_directory() . '/theme.json';
 		$template_json = get_template_directory() . '/theme.json';
 		$json_data = array();
@@ -82,7 +83,10 @@ class VkColorPaletteManager {
 				$json_data = array_merge( $json_data, $template_json_data );
 			}
 		}
-		return $json_data['settings']['color'];
+		if ( isset( $json_data['settings']['color'] ) ) {
+			$color_setting = $json_data['settings']['color'];
+		}
+		return $color_setting;
 	}
 
 	/**
@@ -92,10 +96,10 @@ class VkColorPaletteManager {
 	 */
 	public static function customize_register( $wp_customize ) {
 		// theme.json の色に関するデータの配列を取得
-		$json_color_setting = self::get_theme_json_color_settings();
+		$color_setting = self::get_theme_json_color_settings();
 
 		// theme.json で color.palette がある場合この設定は一切効かなくなる.
-		if ( isset( $json_color_setting['palette'] ) ) {
+		if ( isset( $color_setting['palette'] ) ) {
 			if ( class_exists( 'VK_Custom_Html_Control' ) ) {
 				$wp_customize->add_setting(
 					'color_palette_title',
@@ -141,6 +145,7 @@ class VkColorPaletteManager {
 					)
 				);
 			}
+
 			// theme.json がある場合自動的に ON / OFF が決定される
 			if ( WP_Theme_JSON_Resolver::theme_has_support() ) {				
 				// Display Core Color.
