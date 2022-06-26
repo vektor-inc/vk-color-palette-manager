@@ -70,9 +70,9 @@ class VkColorPaletteManager {
 		$color_setting = array();
 		$theme_json    = get_stylesheet_directory() . '/theme.json';
 		$template_json = get_template_directory() . '/theme.json';
-		$json_data = array();
+		$json_data     = array();
 		if ( file_exists( $theme_json ) ) {
-			$theme_json_data = wp_json_file_decode($theme_json, array( 'associative' => true ) );
+			$theme_json_data = wp_json_file_decode( $theme_json, array( 'associative' => true ) );
 			if ( is_array( $theme_json_data ) ) {
 				$json_data = array_merge( $json_data, $theme_json_data );
 			}
@@ -95,7 +95,7 @@ class VkColorPaletteManager {
 	 * @param object $wp_customize : customize object.
 	 */
 	public static function customize_register( $wp_customize ) {
-		// theme.json の色に関するデータの配列を取得
+		// theme.json の色に関するデータの配列を取得.
 		$color_setting = self::get_theme_json_color_settings();
 
 		// theme.json で settings.color.palette がある場合この設定は一切効かなくなる.
@@ -184,11 +184,12 @@ class VkColorPaletteManager {
 				$wp_customize->add_control(
 					'vk_color_manager_options[color_palette_theme]',
 					array(
-						'label'    => __( 'Theme Color (Classic)', 'vk-color-palette-manager' ),
-						'section'  => 'colors',
-						'settings' => 'vk_color_manager_options[color_palette_theme]',
-						'type'     => 'checkbox',
-						'priority' => 1000,
+						'label'       => __( 'Theme Color (Classic Theme)', 'vk-color-palette-manager' ),
+						'section'     => 'colors',
+						'settings'    => 'vk_color_manager_options[color_palette_theme]',
+						'type'        => 'checkbox',
+						'priority'    => 1000,
+						'description' => __( '* Colors defined in classic theme without theme.json', 'vk-color-palette-manager' ),
 					)
 				);
 			}
@@ -266,7 +267,7 @@ class VkColorPaletteManager {
 
 
 	/**
-	 * Get Core Colors
+	 * Get Core Default Colors
 	 */
 	public static function get_core_colors() {
 		$colors = array();
