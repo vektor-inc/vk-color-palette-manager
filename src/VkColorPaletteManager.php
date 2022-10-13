@@ -151,9 +151,12 @@ class VkColorPaletteManager {
 		foreach ( $colors as $key => $color ) {
 			if ( ! empty( $color['color'] ) ) {
 				// 色はこのクラスでだけの利用なら直接指定でも良いが、他のクラス名で応用できるように一旦css変数に格納している.
-				$dynamic_css .= ':root{ --' . $color['slug'] . ':' . $color['color'] . '}';
-				// 6.1より画像ブロックなどでインラインでstyle="border-top-color:var(--wp--preset--color--$slug);"が入るため変数名をコアに合わせる
+				// 6.1より画像ブロックなどでインラインでstyle="border-top-color:var(--wp--preset--color--$slug);"が入るため変数名をコアに合わせる.
 				$dynamic_css .= ':root{ --wp--preset--color--' . $color['slug'] . ':' . $color['color'] . '}';
+
+				// 古いCSS変数名のフォールバック.
+				$dynamic_css .= '/* --' . $color['slug'] . ' is deprecated. */';
+				$dynamic_css .= ':root{ --' . $color['slug'] . ': var(--wp--preset--color--' . $color['slug'] . ');}';
 				// .has- だけだと負けるので :root は迂闊に消さないように注意
 				$dynamic_css .= ':root .has-' . $color['slug'] . '-color { color:var(--wp--preset--color--' . $color['slug'] . '); }';
 				$dynamic_css .= ':root .has-' . $color['slug'] . '-background-color { background-color:var(--wp--preset--color--' . $color['slug'] . '); }';
