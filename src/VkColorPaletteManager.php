@@ -109,10 +109,10 @@ class VkColorPaletteManager {
 	 * @param object $theme_json : theme_json object.
 	 */
 	public static function filter_theme_json_theme( $theme_json ){
-		$color     = $theme_json->get_data();
+		$get_data  = $theme_json->get_data();
 		$add_color = self::add_color_array();
 		$add_data  = array_merge(
-			$color["settings"]["color"]["palette"]["default"],
+			$get_data["settings"]["color"]["palette"]["default"],
 			$add_color
 		);
 		$new_data = array(
