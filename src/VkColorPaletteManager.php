@@ -197,10 +197,9 @@ class VkColorPaletteManager {
 				$dynamic_css .= '/* --' . $color['slug'] . ' is deprecated. */';
 				$dynamic_css .= ':root{ --' . $color['slug'] . ': var(--wp--preset--color--' . $color['slug'] . ');}';
 				if ( ! self::is_lager_than_wp( '6.1' ) ) {
-					// .has- だけだと負けるので :root は迂闊に消さないように注意
-					$dynamic_css .= ':root .has-' . $color['slug'] . '-color { color:var(--wp--preset--color--' . $color['slug'] . ') !important; }';
-					$dynamic_css .= ':root .has-' . $color['slug'] . '-background-color { background-color:var(--wp--preset--color--' . $color['slug'] . ') !important; }';
-					$dynamic_css .= ':root .has-' . $color['slug'] . '-border-color { border-color:var(--wp--preset--color--' . $color['slug'] . ') !important; }';
+					$dynamic_css .= '.has-' . $color['slug'] . '-color { color:var(--wp--preset--color--' . $color['slug'] . ') !important; }';
+					$dynamic_css .= '.has-' . $color['slug'] . '-background-color { background-color:var(--wp--preset--color--' . $color['slug'] . ') !important; }';
+					$dynamic_css .= '.has-' . $color['slug'] . '-border-color { border-color:var(--wp--preset--color--' . $color['slug'] . ') !important; }';
 				}
 			}
 		}
