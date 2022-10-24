@@ -42,7 +42,7 @@ class VkColorPaletteManager {
 	 */
 	public static function is_lager_than_wp( $target_version ){
 		global $wp_version;
-		// RC版の場合ハイフンを削除.
+		// バージョンにハイフンを含んでいる場合（ RC / beta 版の場合）ハイフンより前の数値だけに変換
 		$_wp_version = strpos( $wp_version, '-' ) !== false ? strstr( $wp_version, '-', true ) : $wp_version;
 		return version_compare( $_wp_version, $target_version, '>=' );
 	}
